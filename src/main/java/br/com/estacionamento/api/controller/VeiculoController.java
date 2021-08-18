@@ -27,30 +27,28 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/veiculos")
 public class VeiculoController {
 
-
 	private VeiculoRepository veiculoRepository;
 	private AdicionaVeiculoNoEstacionamento adicionaVeiculoNoEstacionamento;
 	private VeiculoAssembler veiculoAssembler;
-	
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public VeiculoModel adicionaVeiculo(@Valid @RequestBody VeiculoInput veiculoInput) {
 		Veiculo veiculo = veiculoAssembler.toEntity(veiculoInput);
-		
-		Veiculo veiculoAdiconado = adicionaVeiculoNoEstacionamento.add(veiculo);
-		return 	veiculoAssembler.toModel(veiculoAdiconado);
+
+		Veiculo veiculoAdiconado = adicionaVeiculoNoEstacionamento.create(veiculo);
+		return veiculoAssembler.toModel(veiculoAdiconado);
 	}
-	
+
 	@GetMapping
-	public List<VeiculoModel> list(){
+	public List<VeiculoModel> list() {
 		return veiculoAssembler.toCollectionModel(veiculoRepository.findAll());
 	}
-	
-	@GetMapping("/{id}")		
-	public ResponseEntity<VeiculoModel> find(@PathVariable Long id){
-		return veiculoRepository.findById(id)
-				.map(veiculo -> ResponseEntity.ok(veiculoAssembler.toModel(veiculo)))
+
+	@GetMapping("/{id}")
+	public ResponseEntity<VeiculoModel> find(@PathVariable Long id) {
+		return veiculoRepository.findById(id).map(veiculo -> ResponseEntity.ok(veiculoAssembler.toModel(veiculo)))
 				.orElse(ResponseEntity.notFound().build());
-		
+
 	}
 }

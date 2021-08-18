@@ -61,5 +61,14 @@ public class Estacionamento {
 	@PositiveOrZero
 	@Column(name = "vagas_para_carros")
 	private Integer quantidadeDeVagasParaCarros;
+	
+	@NotNull
+	@Column(name = "qtd_carros_estacionados")
+	private Integer quantidadeDeCarrosEstacionados;
+	
+	@NotNull
+	@Column(name = "qtd_motos_estacionadas")
+	private Integer quantidadeDeMotosEstacionadas;
+
 
 }

@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.estacionamento.api.assembler.EstacionamentoAssembler;
+import br.com.estacionamento.api.model.EstacionamentoModel;
+import br.com.estacionamento.api.model.input.EstacionamentoInput;
 import br.com.estacionamento.domain.model.Estacionamento;
 import br.com.estacionamento.domain.repository.EstacionamentoRepository;
 import br.com.estacionamento.domain.service.CrudEstacionamento;
@@ -28,29 +31,31 @@ public class EstacionamentoController {
 
 	private EstacionamentoRepository estacionamentoRespository;
 	private CrudEstacionamento crudEstacionamento;
+	private EstacionamentoAssembler estacionamentoAssembler;
 
 	@GetMapping
-	public List<Estacionamento> list() {
-		return estacionamentoRespository.findAll();
+	public List<EstacionamentoModel> list() {
+		return estacionamentoAssembler.toCollectionModel(estacionamentoRespository.findAll());
 	}
-	
-//	@GetMapping
-//	public List<String> list() {
-//		List<String> aa = new ArrayList<>();
-//		estacionamentoRespository.findAll().forEach(a ->aa.add(a.getId().toString()));
-//		
-//		return aa;
-//	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Estacionamento> find(@PathVariable Long id) {
-		return estacionamentoRespository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	public ResponseEntity<EstacionamentoModel> find(@PathVariable Long id) {
+		return estacionamentoRespository.findById(id)
+				.map(estacionamento -> ResponseEntity.ok(estacionamentoAssembler.toModel(estacionamento)))
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Estacionamento post(@Valid @RequestBody Estacionamento estacionamento) {
-		return crudEstacionamento.create(estacionamento);
+	public EstacionamentoModel post(@Valid @RequestBody EstacionamentoInput estacionamentoInput) {
+		Estacionamento estacionamento = estacionamentoAssembler.toEntity(estacionamentoInput);
+		
+		estacionamento.setQuantidadeDeCarrosEstacionados(0);
+		estacionamento.setQuantidadeDeMotosEstacionadas(0);
+		
+		Estacionamento estacionamentoAdicionado = crudEstacionamento.create(estacionamento);
+
+		return estacionamentoAssembler.toModel(estacionamentoAdicionado);
 	}
 
 	@PutMapping("/{id}")

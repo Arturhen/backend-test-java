@@ -18,7 +18,7 @@ public class AdicionaVeiculoNoEstacionamento {
 	private CrudEstacionamento crudEstacionamento;
 
 	@Transactional
-	public Veiculo add(Veiculo veiculo) {
+	public Veiculo create(Veiculo veiculo) {
 
 		Estacionamento estacionamento = crudEstacionamento.find(veiculo.getEstacionamento().getId());
 

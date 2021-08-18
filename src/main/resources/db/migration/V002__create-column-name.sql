@@ -1,0 +1,1 @@
+alter table estacionamento add nome VARCHAR(60) NOT NULL;

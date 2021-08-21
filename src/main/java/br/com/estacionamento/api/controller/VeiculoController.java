@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import br.com.estacionamento.api.model.input.VeiculoInput;
 import br.com.estacionamento.domain.model.Veiculo;
 import br.com.estacionamento.domain.repository.VeiculoRepository;
 import br.com.estacionamento.domain.service.AdicionaVeiculoNoEstacionamento;
+import br.com.estacionamento.domain.service.DeleteVeiculo;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -30,6 +32,7 @@ public class VeiculoController {
 	private VeiculoRepository veiculoRepository;
 	private AdicionaVeiculoNoEstacionamento adicionaVeiculoNoEstacionamento;
 	private VeiculoAssembler veiculoAssembler;
+	private DeleteVeiculo deleteVeiculo;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -50,5 +53,11 @@ public class VeiculoController {
 		return veiculoRepository.findById(id).map(veiculo -> ResponseEntity.ok(veiculoAssembler.toModel(veiculo)))
 				.orElse(ResponseEntity.notFound().build());
 
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id){
+		deleteVeiculo.deleteByID(id);
+		return ResponseEntity.noContent().build();
 	}
 }

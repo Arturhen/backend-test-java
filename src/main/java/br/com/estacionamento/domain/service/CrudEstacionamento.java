@@ -31,6 +31,7 @@ public class CrudEstacionamento {
 
 	public void delete(Long id) {
 		estacionamentoRepository.deleteById(id);
+		//deletar veiculos com o mesmo id do estacionamento
 	}
 
 	public Estacionamento find(Long id) {

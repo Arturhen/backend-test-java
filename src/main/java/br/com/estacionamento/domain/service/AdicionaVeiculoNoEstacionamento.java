@@ -32,7 +32,7 @@ public class AdicionaVeiculoNoEstacionamento {
 			this.updateVagasDeMoto(estacionamento, veiculo);
 		}
 		
-//		verificar se veiculo ja esta estacionado, ver as vagas maximas
+//		verificar se veiculo ja esta estacionado
 		veiculo.setHorarioEntrada(OffsetDateTime.now());
 		veiculo.setEstacionamento(estacionamento);
 

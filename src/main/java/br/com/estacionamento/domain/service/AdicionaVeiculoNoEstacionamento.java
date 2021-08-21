@@ -1,6 +1,7 @@
 package br.com.estacionamento.domain.service;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,14 @@ public class AdicionaVeiculoNoEstacionamento {
 
 	@Transactional
 	public Veiculo create(Veiculo veiculo) {
+		
+		Optional<Veiculo> veiculoNoBanco = veiculoRepository.findByPlaca(veiculo.getPlaca());
+		
+		if (veiculoNoBanco.isPresent()) {
+			if (!veiculoNoBanco.get().equals(veiculo)) {
+				throw new BusinessException("Ja existe um Veiculo com Essa placa Estacionado");
+			}
+		}		
 
 		Estacionamento estacionamento = crudEstacionamento.find(veiculo.getEstacionamento().getId());
 

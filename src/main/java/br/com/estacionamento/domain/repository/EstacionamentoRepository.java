@@ -11,7 +11,6 @@ import br.com.estacionamento.domain.model.Estacionamento;
 @Repository
 public interface EstacionamentoRepository extends JpaRepository<Estacionamento, Long>{
 
-	
 	List<Estacionamento> findByNome(String nome);
 	List<Estacionamento> findByNomeContaining(String nome);
 	Optional<Estacionamento> findByCnpj(String cnpj);

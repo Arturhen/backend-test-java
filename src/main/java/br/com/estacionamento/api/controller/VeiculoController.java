@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.estacionamento.api.assembler.VeiculoAssembler;
 import br.com.estacionamento.api.model.VeiculoModel;
 import br.com.estacionamento.api.model.input.VeiculoInput;
-import br.com.estacionamento.domain.model.Estacionamento;
 import br.com.estacionamento.domain.model.Veiculo;
 import br.com.estacionamento.domain.repository.VeiculoRepository;
 import br.com.estacionamento.domain.service.AdicionaVeiculoNoEstacionamento;
@@ -41,6 +40,8 @@ public class VeiculoController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public VeiculoModel adicionaVeiculo(@Valid @RequestBody VeiculoInput veiculoInput) {
+		System.out.println("VAMOS JOGAAAAAAAAAAAAAAAR");
+
 		Veiculo veiculo = veiculoAssembler.toEntity(veiculoInput);
 
 		Veiculo veiculoAdiconado = adicionaVeiculoNoEstacionamento.create(veiculo);

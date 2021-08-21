@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.estacionamento.api.assembler.VeiculoAssembler;
 import br.com.estacionamento.api.model.VeiculoModel;
 import br.com.estacionamento.api.model.input.VeiculoInput;
+import br.com.estacionamento.domain.model.Estacionamento;
 import br.com.estacionamento.domain.model.Veiculo;
 import br.com.estacionamento.domain.repository.VeiculoRepository;
 import br.com.estacionamento.domain.service.AdicionaVeiculoNoEstacionamento;
+import br.com.estacionamento.domain.service.CrudVeiculo;
 import br.com.estacionamento.domain.service.DeleteVeiculo;
 import lombok.AllArgsConstructor;
 
@@ -33,6 +36,7 @@ public class VeiculoController {
 	private AdicionaVeiculoNoEstacionamento adicionaVeiculoNoEstacionamento;
 	private VeiculoAssembler veiculoAssembler;
 	private DeleteVeiculo deleteVeiculo;
+	private CrudVeiculo crudVeiculo;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -60,4 +64,23 @@ public class VeiculoController {
 		deleteVeiculo.deleteByID(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<VeiculoModel> put(@Valid @RequestBody VeiculoInput veiculoInput,
+			@PathVariable Long id) {
+		
+		if (!veiculoRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		Veiculo veiculo = veiculoAssembler.toEntity(veiculoInput);
+		
+		crudVeiculo.update(id, veiculo);
+		
+		VeiculoModel veiculoModel= veiculoAssembler.toModel(veiculo);
+		
+		return ResponseEntity.ok(veiculoModel);
+
+	}
+	
+	
 }

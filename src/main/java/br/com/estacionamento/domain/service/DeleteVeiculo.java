@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import br.com.estacionamento.domain.exception.BusinessException;
 import br.com.estacionamento.domain.model.Estacionamento;
 import br.com.estacionamento.domain.model.Veiculo;
-import br.com.estacionamento.domain.model.VeiculoType;
 import br.com.estacionamento.domain.repository.VeiculoRepository;
 import lombok.AllArgsConstructor;
 
@@ -18,6 +17,7 @@ import lombok.AllArgsConstructor;
 public class DeleteVeiculo {
 
 	private VeiculoRepository veiculoRepository;
+	private VeiculosServices veiculosServices;
 	
 	@Transactional
 	public void deleteByID(Long id) {
@@ -31,13 +31,8 @@ public class DeleteVeiculo {
 		
 		Estacionamento estacionamento = veiculo.getEstacionamento();
 		
-		if(veiculo.getTipo() == VeiculoType.CARRO) {
-			estacionamento.setQuantidadeDeCarrosEstacionados(estacionamento.getQuantidadeDeCarrosEstacionados() - 1 );
-		}
+		veiculosServices.deleteVeiculoInEstacionamento(estacionamento, veiculo);
 		
-		if(veiculo.getTipo() == VeiculoType.MOTO) {
-			estacionamento.setQuantidadeDeMotosEstacionadas(estacionamento.getQuantidadeDeMotosEstacionadas() - 1 );
-		}
 		veiculoRepository.delete(veiculo);
 		
 	}

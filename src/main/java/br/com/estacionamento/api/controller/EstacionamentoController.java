@@ -85,29 +85,7 @@ public class EstacionamentoController {
 
 		Estacionamento estacionamento = estacionamentoAssembler.putToEntity(estacionamentoPut);
 
-		estacionamentoNoBanco.setId(id);
-
-		if (estacionamento.getEndereco() != null) {
-			estacionamentoNoBanco.setEndereco(estacionamento.getEndereco());
-		}
-
-		if (estacionamento.getTelefone() != null) {
-			estacionamentoNoBanco.setTelefone(estacionamento.getTelefone());
-		}
-
-		if (estacionamento.getQuantidadeDeVagasParaCarros() != null) {
-			if(estacionamento.getQuantidadeDeVagasParaCarros() < estacionamentoNoBanco.getQuantidadeDeCarrosEstacionados()) {
-				throw new BusinessException("O número de vagas para carro deve ser igual ou superior a quantidade de carros estacionados");
-			}
-			estacionamentoNoBanco.setQuantidadeDeVagasParaCarros(estacionamento.getQuantidadeDeVagasParaCarros());
-		}
-
-		if (estacionamento.getQuantidadeDeVagasParaMotos() != null) {
-			if(estacionamento.getQuantidadeDeVagasParaMotos() < estacionamentoNoBanco.getQuantidadeDeMotosEstacionadas()) {
-				throw new BusinessException("O número de vagas para motos deve ser igual ou superior a quantidade de motos estacionados");
-			}
-			estacionamentoNoBanco.setQuantidadeDeVagasParaMotos(estacionamento.getQuantidadeDeVagasParaMotos());
-		}
+		estacionamentoNoBanco = crudEstacionamento.update(estacionamentoNoBanco, estacionamento, id);
 
 		crudEstacionamento.create(estacionamentoNoBanco);
 

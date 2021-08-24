@@ -40,7 +40,6 @@ public class VeiculoController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public VeiculoModel adicionaVeiculo(@Valid @RequestBody VeiculoInput veiculoInput) {
-		System.out.println("VAMOS JOGAAAAAAAAAAAAAAAR");
 
 		Veiculo veiculo = veiculoAssembler.toEntity(veiculoInput);
 

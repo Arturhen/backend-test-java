@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.estacionamento.domain.model.Estacionamento;
 import br.com.estacionamento.domain.model.Veiculo;
-import br.com.estacionamento.domain.model.VeiculoType;
 import br.com.estacionamento.domain.repository.VeiculoRepository;
 import lombok.AllArgsConstructor;
 

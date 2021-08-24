@@ -56,10 +56,8 @@ public class EstacionamentoController {
 
 		estacionamento.setQuantidadeDeCarrosEstacionados(0);
 		estacionamento.setQuantidadeDeMotosEstacionadas(0);
-		System.out.println("VAMOS JOGAAAAAAAAAAAAAAAR");
 
 		Estacionamento estacionamentoAdicionado = crudEstacionamento.create(estacionamento);
-		System.out.println("VAMOS JOGAR VAMOS JOGAR FREE FIRE");
 
 		return estacionamentoAssembler.toModel(estacionamentoAdicionado);
 	}

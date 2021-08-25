@@ -14,6 +14,7 @@ public class VeiculoModel {
 	private String nomeEstacionamento;
 	private String marca;
 	private String modelo;
+	private String cor;
 	private String placa;
 	private VeiculoType tipo;
 	private OffsetDateTime horarioEntrada;

@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import br.com.estacionamento.api.model.EstacionamentoModel;
+import br.com.estacionamento.api.model.EstacionamentoPut;
 import br.com.estacionamento.api.model.input.EstacionamentoInput;
 import br.com.estacionamento.domain.model.Estacionamento;
 import lombok.AllArgsConstructor;
@@ -30,5 +31,10 @@ public class EstacionamentoAssembler {
 	public Estacionamento toEntity(EstacionamentoInput estacionamentoInput) {
 		return modelMapper.map(estacionamentoInput, Estacionamento.class);
 	}
+	
+	public Estacionamento putToEntity(EstacionamentoPut estacionamentoPut) {
+		return modelMapper.map(estacionamentoPut, Estacionamento.class);
+	}
+	
 	
 }

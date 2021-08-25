@@ -16,13 +16,18 @@ public class AdicionaVeiculoNoEstacionamento {
 
 	private VeiculoRepository veiculoRepository;
 	private CrudEstacionamento crudEstacionamento;
+	private VeiculosServices veiculosServices;
 
 	@Transactional
 	public Veiculo create(Veiculo veiculo) {
 
+		veiculosServices.existWithSamePlate(veiculo);
+
 		Estacionamento estacionamento = crudEstacionamento.find(veiculo.getEstacionamento().getId());
 
-//		verificar se veiculo ja esta estacionado, ver as vagas maximas
+		veiculosServices.updateVagasEstacionamento(estacionamento, veiculo);
+
+//		verificar se veiculo ja esta estacionado
 		veiculo.setHorarioEntrada(OffsetDateTime.now());
 		veiculo.setEstacionamento(estacionamento);
 

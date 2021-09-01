@@ -6,13 +6,13 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.estacionamento.domain.model.Estacionamento;
+import br.com.estacionamento.domain.model.EstacionamentoDomainModel;
 
 @Repository
-public interface EstacionamentoRepository extends JpaRepository<Estacionamento, Long>{
+public interface EstacionamentoRepository extends JpaRepository<EstacionamentoDomainModel, Long>{
 
-	List<Estacionamento> findByNome(String nome);
-	List<Estacionamento> findByNomeContaining(String nome);
-	Optional<Estacionamento> findByCnpj(String cnpj);
+	List<EstacionamentoDomainModel> findByNome(String nome);
+	List<EstacionamentoDomainModel> findByNomeContaining(String nome);
+	Optional<EstacionamentoDomainModel> findByCnpj(String cnpj);
 	
 }

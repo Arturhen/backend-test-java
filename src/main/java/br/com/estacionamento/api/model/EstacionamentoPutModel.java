@@ -1,18 +1,24 @@
 package br.com.estacionamento.api.model;
 
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
+
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class EstacionamentoModel {
+@Setter
+public class EstacionamentoPutModel {
 
-	private Long id;
-	private String nome;
+	@Size(max = 255)
 	private String endereco;
+	
+	@Size(max = 20)
 	private String telefone;
+	
+	@PositiveOrZero
 	private Integer quantidadeDeVagasParaMotos;
-	private Integer quantidadeDeMotosEstacionadas;
+	
+	@PositiveOrZero
 	private Integer quantidadeDeVagasParaCarros;
-	private Integer quantidadeDeCarrosEstacionados;
 }

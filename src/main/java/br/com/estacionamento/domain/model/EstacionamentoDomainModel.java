@@ -23,7 +23,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "estacionamento")
-public class Estacionamento {
+public class EstacionamentoDomainModel {
 
 	@NotNull(groups = ValidationGroups.EstacionamentoID.class)
 	@EqualsAndHashCode.Include

@@ -18,12 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.estacionamento.api.assembler.VeiculoAssembler;
 import br.com.estacionamento.api.model.VeiculoModel;
-import br.com.estacionamento.api.model.input.VeiculoInput;
-import br.com.estacionamento.domain.model.Veiculo;
-import br.com.estacionamento.domain.repository.VeiculoRepository;
-import br.com.estacionamento.domain.service.AdicionaVeiculoNoEstacionamento;
-import br.com.estacionamento.domain.service.CrudVeiculo;
-import br.com.estacionamento.domain.service.DeleteVeiculo;
+import br.com.estacionamento.api.model.input.VeiculoInputModel;
+import br.com.estacionamento.domain.model.VeiculoDomainModel;
+import br.com.estacionamento.domain.service.VeiculoService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -31,56 +28,54 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/veiculos")
 public class VeiculoController {
 
-	private VeiculoRepository veiculoRepository;
-	private AdicionaVeiculoNoEstacionamento adicionaVeiculoNoEstacionamento;
 	private VeiculoAssembler veiculoAssembler;
-	private DeleteVeiculo deleteVeiculo;
-	private CrudVeiculo crudVeiculo;
+	private VeiculoService veiculoService;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public VeiculoModel adicionaVeiculo(@Valid @RequestBody VeiculoInput veiculoInput) {
+	public VeiculoModel adicionaVeiculo(@Valid @RequestBody VeiculoInputModel veiculoInput) {
 
-		Veiculo veiculo = veiculoAssembler.toEntity(veiculoInput);
+		VeiculoDomainModel veiculo = veiculoAssembler.toEntity(veiculoInput);
 
-		Veiculo veiculoAdiconado = adicionaVeiculoNoEstacionamento.create(veiculo);
+		VeiculoDomainModel veiculoAdiconado = veiculoService.create(veiculo);
 		return veiculoAssembler.toModel(veiculoAdiconado);
 	}
 
 	@GetMapping
 	public List<VeiculoModel> list() {
-		return veiculoAssembler.toCollectionModel(veiculoRepository.findAll());
+		return veiculoAssembler.toCollectionModel(veiculoService.list());
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<VeiculoModel> find(@PathVariable Long id) {
-		return veiculoRepository.findById(id).map(veiculo -> ResponseEntity.ok(veiculoAssembler.toModel(veiculo)))
-				.orElse(ResponseEntity.notFound().build());
-
-	}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
-		deleteVeiculo.deleteByID(id);
-		return ResponseEntity.noContent().build();
-	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<VeiculoModel> put(@Valid @RequestBody VeiculoInput veiculoInput,
-			@PathVariable Long id) {
-		
-		if (!veiculoRepository.existsById(id)) {
+		try {
+			VeiculoDomainModel veiculo = veiculoService.findById(id);
+			return ResponseEntity.ok(veiculoAssembler.toModel(veiculo));
+		} catch (Error e) {
 			return ResponseEntity.notFound().build();
 		}
-		Veiculo veiculo = veiculoAssembler.toEntity(veiculoInput);
-		
-		crudVeiculo.update(id, veiculo);
-		
-		VeiculoModel veiculoModel= veiculoAssembler.toModel(veiculo);
-		
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		veiculoService.deleteByID(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<VeiculoModel> put(@Valid @RequestBody VeiculoInputModel veiculoInput, @PathVariable Long id) {
+
+		if (!veiculoService.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		VeiculoDomainModel veiculo = veiculoAssembler.toEntity(veiculoInput);
+
+		veiculoService.update(id, veiculo);
+
+		VeiculoModel veiculoModel = veiculoAssembler.toModel(veiculo);
+
 		return ResponseEntity.ok(veiculoModel);
 
 	}
-	
-	
+
 }

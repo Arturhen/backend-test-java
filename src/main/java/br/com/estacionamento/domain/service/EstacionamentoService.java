@@ -1,27 +1,28 @@
 package br.com.estacionamento.domain.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.estacionamento.domain.exception.BusinessException;
-import br.com.estacionamento.domain.model.Estacionamento;
+import br.com.estacionamento.domain.model.EstacionamentoDomainModel;
 import br.com.estacionamento.domain.repository.EstacionamentoRepository;
 import br.com.estacionamento.domain.repository.VeiculoRepository;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Service
-public class CrudEstacionamento {
+public class EstacionamentoService {
 
 	private EstacionamentoRepository estacionamentoRepository;
 	private VeiculoRepository veiculoRepository;
 
 	@Transactional
-	public Estacionamento create(Estacionamento estacionamento) {
+	public EstacionamentoDomainModel create(EstacionamentoDomainModel estacionamento) {
 
-		Optional<Estacionamento> estacionamentoNoBanco = estacionamentoRepository.findByCnpj(estacionamento.getCnpj());
+		Optional<EstacionamentoDomainModel> estacionamentoNoBanco = estacionamentoRepository.findByCnpj(estacionamento.getCnpj());
 
 		if (estacionamentoNoBanco.isPresent()) {
 			if (!estacionamentoNoBanco.get().equals(estacionamento)) {
@@ -30,7 +31,10 @@ public class CrudEstacionamento {
 		}
 		return estacionamentoRepository.save(estacionamento);
 	}
-
+	public List<EstacionamentoDomainModel> list() {
+		return estacionamentoRepository.findAll();
+	}
+	
 	public void delete(Long id) {
 		veiculoRepository.findByEstacionamento(estacionamentoRepository.findById(id).get()).stream()
 				.forEach(veiculo -> veiculoRepository.delete(veiculo));
@@ -38,12 +42,12 @@ public class CrudEstacionamento {
 		estacionamentoRepository.deleteById(id);
 	}
 
-	public Estacionamento find(Long id) {
+	public EstacionamentoDomainModel findById(Long id) {
 		return estacionamentoRepository.findById(id)
 				.orElseThrow(() -> new BusinessException("Estacionamento nao encontrado"));
 	}
 
-	public Estacionamento update(Estacionamento estacionamentoNoBanco, Estacionamento estacionamentoUpdates, Long id) {
+	public EstacionamentoDomainModel update(EstacionamentoDomainModel estacionamentoNoBanco, EstacionamentoDomainModel estacionamentoUpdates, Long id) {
 
 		estacionamentoNoBanco.setId(id);
 
@@ -75,6 +79,13 @@ public class CrudEstacionamento {
 		}
 		return estacionamentoNoBanco;
 
+	}
+	public boolean existsById(Long id) {
+		if (estacionamentoRepository.findById(id).isPresent()) {
+			return true;
+		}
+
+		return false;
 	}
 
 }

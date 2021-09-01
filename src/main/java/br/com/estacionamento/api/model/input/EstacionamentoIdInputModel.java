@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EstacionamentoIdInput {
+public class EstacionamentoIdInputModel {
 
 	@NotNull
 	private Long id;

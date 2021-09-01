@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import br.com.estacionamento.api.model.EstacionamentoModel;
-import br.com.estacionamento.api.model.EstacionamentoPut;
-import br.com.estacionamento.api.model.input.EstacionamentoInput;
-import br.com.estacionamento.domain.model.Estacionamento;
+import br.com.estacionamento.api.model.EstacionamentoOutputModel;
+import br.com.estacionamento.api.model.EstacionamentoPutModel;
+import br.com.estacionamento.api.model.input.EstacionamentoInputModel;
+import br.com.estacionamento.domain.model.EstacionamentoDomainModel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -18,22 +18,22 @@ public class EstacionamentoAssembler {
 
 	private ModelMapper modelMapper;
 	
-	public EstacionamentoModel toModel(Estacionamento estacionamento) {
-		return modelMapper.map(estacionamento, EstacionamentoModel.class);
+	public EstacionamentoOutputModel toModel(EstacionamentoDomainModel estacionamento) {
+		return modelMapper.map(estacionamento, EstacionamentoOutputModel.class);
 	}
 	
-	public List<EstacionamentoModel> toCollectionModel(List<Estacionamento> estacionamentos){
+	public List<EstacionamentoOutputModel> toCollectionModel(List<EstacionamentoDomainModel> estacionamentos){
 		return estacionamentos.stream()
 				.map(this::toModel)
 				.collect(Collectors.toList());
 	}
 	
-	public Estacionamento toEntity(EstacionamentoInput estacionamentoInput) {
-		return modelMapper.map(estacionamentoInput, Estacionamento.class);
+	public EstacionamentoDomainModel toEntity(EstacionamentoInputModel estacionamentoInput) {
+		return modelMapper.map(estacionamentoInput, EstacionamentoDomainModel.class);
 	}
 	
-	public Estacionamento putToEntity(EstacionamentoPut estacionamentoPut) {
-		return modelMapper.map(estacionamentoPut, Estacionamento.class);
+	public EstacionamentoDomainModel putToEntity(EstacionamentoPutModel estacionamentoPut) {
+		return modelMapper.map(estacionamentoPut, EstacionamentoDomainModel.class);
 	}
 	
 	

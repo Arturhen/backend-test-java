@@ -14,11 +14,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class VeiculoInput {
+public class VeiculoInputModel {
 	
 	@Valid
 	@NotNull
-	private EstacionamentoIdInput estacionamento;
+	private EstacionamentoIdInputModel estacionamento;
 	
 	@NotBlank
 	@Size(max =20)

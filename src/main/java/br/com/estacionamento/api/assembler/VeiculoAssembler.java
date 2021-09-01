@@ -7,8 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import br.com.estacionamento.api.model.VeiculoModel;
-import br.com.estacionamento.api.model.input.VeiculoInput;
-import br.com.estacionamento.domain.model.Veiculo;
+import br.com.estacionamento.api.model.input.VeiculoInputModel;
+import br.com.estacionamento.domain.model.VeiculoDomainModel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -17,18 +17,18 @@ public class VeiculoAssembler {
 
 	private ModelMapper modelMapper;
 	
-	public VeiculoModel toModel(Veiculo veiculo) {
+	public VeiculoModel toModel(VeiculoDomainModel veiculo) {
 		return modelMapper.map(veiculo, VeiculoModel.class);
 	}
 	
-	public List<VeiculoModel> toCollectionModel(List<Veiculo> veiculos){
+	public List<VeiculoModel> toCollectionModel(List<VeiculoDomainModel> veiculos){
 		return veiculos.stream()
 				.map(this::toModel)
 				.collect(Collectors.toList());
 	}
 	
-	public Veiculo toEntity(VeiculoInput veiculoInput) {
-		return modelMapper.map(veiculoInput, Veiculo.class);
+	public VeiculoDomainModel toEntity(VeiculoInputModel veiculoInput) {
+		return modelMapper.map(veiculoInput, VeiculoDomainModel.class);
 	}
 	
 }

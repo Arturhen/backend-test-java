@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class EstacionamentoInput {
+public class EstacionamentoInputModel {
 
 	@NotBlank
 	@Size(max = 60)

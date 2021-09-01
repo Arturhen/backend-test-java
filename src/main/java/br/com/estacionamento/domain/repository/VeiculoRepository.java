@@ -6,14 +6,14 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.estacionamento.domain.model.Estacionamento;
-import br.com.estacionamento.domain.model.Veiculo;
+import br.com.estacionamento.domain.model.EstacionamentoDomainModel;
+import br.com.estacionamento.domain.model.VeiculoDomainModel;
 
 @Repository
-public interface VeiculoRepository extends JpaRepository<Veiculo, Long>{
+public interface VeiculoRepository extends JpaRepository<VeiculoDomainModel, Long>{
 	
 	
-	Optional<Veiculo> findByPlaca(String placa);
-	List<Veiculo> findByEstacionamento(Estacionamento estacionamento);
+	Optional<VeiculoDomainModel> findByPlaca(String placa);
+	List<VeiculoDomainModel> findByEstacionamento(EstacionamentoDomainModel estacionamento);
 	
 }

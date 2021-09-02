@@ -21,12 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.estacionamento.api.assembler.EstacionamentoAssembler;
 import br.com.estacionamento.api.model.EstacionamentoOutputModel;
 import br.com.estacionamento.api.model.EstacionamentoPutModel;
-import br.com.estacionamento.api.model.VeiculoModel;
 import br.com.estacionamento.api.model.input.EstacionamentoInputModel;
 import br.com.estacionamento.domain.exception.BusinessException;
 import br.com.estacionamento.domain.model.EstacionamentoDomainModel;
-import br.com.estacionamento.domain.model.VeiculoDomainModel;
-import br.com.estacionamento.domain.repository.EstacionamentoRepository;
 import br.com.estacionamento.domain.service.EstacionamentoService;
 import lombok.AllArgsConstructor;
 
@@ -35,7 +32,6 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/estacionamentos")
 public class EstacionamentoController {
 
-	private EstacionamentoRepository estacionamentoRepository;//nao pode
 	private EstacionamentoService estacionamentoService;
 	private EstacionamentoAssembler estacionamentoAssembler;
 
@@ -46,12 +42,15 @@ public class EstacionamentoController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<EstacionamentoOutputModel> find(@PathVariable Long id) {
-		try {
-			EstacionamentoDomainModel estacionamento = estacionamentoService.findById(id);
+
+		Optional<EstacionamentoDomainModel> estacionamentoOptional = estacionamentoService.findById(id);
+		
+		if (estacionamentoOptional.isPresent()) {
+			EstacionamentoDomainModel estacionamento = estacionamentoOptional.get();
 			return ResponseEntity.ok(estacionamentoAssembler.toModel(estacionamento));
-		} catch (Error e) {
-			return ResponseEntity.notFound().build();
 		}
+		
+		return ResponseEntity.notFound().build();
 	}
 
 	@PostMapping
@@ -71,6 +70,7 @@ public class EstacionamentoController {
 	@PutMapping("/{id}")
 	public ResponseEntity<EstacionamentoDomainModel> put(@Valid @RequestBody EstacionamentoPutModel estacionamentoPut,
 			@PathVariable Long id) {
+		System.out.println("aaaa");
 
 		if (!(estacionamentoPut.getTelefone() != null || estacionamentoPut.getEndereco() != null
 				|| estacionamentoPut.getQuantidadeDeVagasParaCarros() != null
@@ -78,7 +78,7 @@ public class EstacionamentoController {
 			throw new BusinessException("Não pode atualizar com dados Vazios");
 		}
 
-		Optional<EstacionamentoDomainModel> estacionamentoNoBancoOptional = estacionamentoRepository.findById(id);
+		Optional<EstacionamentoDomainModel> estacionamentoNoBancoOptional = estacionamentoService.findById(id);
 
 		if (!estacionamentoNoBancoOptional.isPresent()) {
 			return ResponseEntity.notFound().build();

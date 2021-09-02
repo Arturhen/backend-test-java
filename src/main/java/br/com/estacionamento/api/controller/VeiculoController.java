@@ -58,6 +58,11 @@ public class VeiculoController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		
+		if (!veiculoService.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		
 		veiculoService.deleteByID(id);
 		return ResponseEntity.noContent().build();
 	}

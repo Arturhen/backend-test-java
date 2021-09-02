@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.estacionamento.domain.exception.BusinessException;
 import br.com.estacionamento.domain.model.EstacionamentoDomainModel;
+import br.com.estacionamento.domain.model.VeiculoDomainModel;
 import br.com.estacionamento.domain.repository.EstacionamentoRepository;
 import br.com.estacionamento.domain.repository.VeiculoRepository;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,8 @@ public class EstacionamentoService {
 	@Transactional
 	public EstacionamentoDomainModel create(EstacionamentoDomainModel estacionamento) {
 
-		Optional<EstacionamentoDomainModel> estacionamentoNoBanco = estacionamentoRepository.findByCnpj(estacionamento.getCnpj());
+		Optional<EstacionamentoDomainModel> estacionamentoNoBanco = estacionamentoRepository
+				.findByCnpj(estacionamento.getCnpj());
 
 		if (estacionamentoNoBanco.isPresent()) {
 			if (!estacionamentoNoBanco.get().equals(estacionamento)) {
@@ -31,23 +33,26 @@ public class EstacionamentoService {
 		}
 		return estacionamentoRepository.save(estacionamento);
 	}
+
 	public List<EstacionamentoDomainModel> list() {
 		return estacionamentoRepository.findAll();
 	}
-	
+
 	public void delete(Long id) {
-		veiculoRepository.findByEstacionamento(estacionamentoRepository.findById(id).get()).stream()
-				.forEach(veiculo -> veiculoRepository.delete(veiculo));
+		List<VeiculoDomainModel> list = veiculoRepository.findByEstacionamento(this.findById(12L).get());
+		System.out.println(list);
+//		veiculoRepository.findByEstacionamento(this.findById(id).get()).stream()
+//				.forEach(veiculo -> veiculoRepository.delete(veiculo));
 
-		estacionamentoRepository.deleteById(id);
+//		estacionamentoRepository.deleteById(id);
 	}
 
-	public EstacionamentoDomainModel findById(Long id) {
-		return estacionamentoRepository.findById(id)
-				.orElseThrow(() -> new BusinessException("Estacionamento nao encontrado"));
+	public Optional<EstacionamentoDomainModel> findById(Long id) {
+		return estacionamentoRepository.findById(id);
 	}
 
-	public EstacionamentoDomainModel update(EstacionamentoDomainModel estacionamentoNoBanco, EstacionamentoDomainModel estacionamentoUpdates, Long id) {
+	public EstacionamentoDomainModel update(EstacionamentoDomainModel estacionamentoNoBanco,
+			EstacionamentoDomainModel estacionamentoUpdates, Long id) {
 
 		estacionamentoNoBanco.setId(id);
 
@@ -80,6 +85,7 @@ public class EstacionamentoService {
 		return estacionamentoNoBanco;
 
 	}
+
 	public boolean existsById(Long id) {
 		if (estacionamentoRepository.findById(id).isPresent()) {
 			return true;

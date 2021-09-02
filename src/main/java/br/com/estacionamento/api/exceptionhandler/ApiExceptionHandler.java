@@ -48,7 +48,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		
-//		Abstrair problema
 		Problem problem = new Problem();
 		problem.setStatus(status.value());
 		problem.setDateHour(LocalDateTime.now());

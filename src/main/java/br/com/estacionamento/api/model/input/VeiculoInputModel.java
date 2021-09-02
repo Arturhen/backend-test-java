@@ -37,6 +37,7 @@ public class VeiculoInputModel {
 	@Pattern(regexp = "[A-Z]{3}[0-9][0-9A-Z][0-9]{2}", message = "Placa padrão mercosul AAA1A23")
 	private String placa;
 	
+
 	@Enumerated(EnumType.STRING)
 	private VeiculoType tipo;
 }

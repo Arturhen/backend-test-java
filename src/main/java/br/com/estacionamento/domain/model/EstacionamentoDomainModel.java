@@ -42,6 +42,15 @@ public class EstacionamentoDomainModel {
 	@Column(name = "cnpj")
 	private String cnpj;
 
+	@Size(max= 255)
+	@Column(name = "token")
+	private String token;
+	
+	@NotBlank
+	@Size(max= 255)
+	@Column(name = "senha")
+	private String senha;
+	
 	@NotBlank
 	@Size(max = 255)
 	@Column(name = "endereco")

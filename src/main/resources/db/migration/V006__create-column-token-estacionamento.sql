@@ -1,0 +1,1 @@
+alter table estacionamento_api.estacionamento add token varchar(255);

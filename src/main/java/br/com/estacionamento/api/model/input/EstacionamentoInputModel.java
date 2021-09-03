@@ -1,5 +1,6 @@
 package br.com.estacionamento.api.model.input;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -23,6 +24,11 @@ public class EstacionamentoInputModel {
 	@Size(max = 20)
 	private String cnpj;
 	
+	@NotBlank
+	@Size(max= 255)
+	@Column(name = "senha")
+	private String senha;
+		
 	@NotBlank
 	@Size(max = 255)
 	private String endereco;

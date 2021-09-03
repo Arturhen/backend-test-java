@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +23,10 @@ import br.com.estacionamento.api.assembler.EstacionamentoAssembler;
 import br.com.estacionamento.api.model.EstacionamentoOutputModel;
 import br.com.estacionamento.api.model.EstacionamentoPutModel;
 import br.com.estacionamento.api.model.input.EstacionamentoInputModel;
+import br.com.estacionamento.api.model.input.EstacionamentoLoginModel;
 import br.com.estacionamento.domain.exception.BusinessException;
 import br.com.estacionamento.domain.model.EstacionamentoDomainModel;
+import br.com.estacionamento.domain.service.EstacionamentoAuthenticationService;
 import br.com.estacionamento.domain.service.EstacionamentoService;
 import lombok.AllArgsConstructor;
 
@@ -33,6 +36,7 @@ import lombok.AllArgsConstructor;
 public class EstacionamentoController {
 
 	private EstacionamentoService estacionamentoService;
+	private EstacionamentoAuthenticationService estacionamentoAuthenticationService;
 	private EstacionamentoAssembler estacionamentoAssembler;
 
 	@GetMapping
@@ -47,7 +51,7 @@ public class EstacionamentoController {
 		
 		if (estacionamentoOptional.isPresent()) {
 			EstacionamentoDomainModel estacionamento = estacionamentoOptional.get();
-			return ResponseEntity.ok(estacionamentoAssembler.toModel(estacionamento));
+			return ResponseEntity.ok(estacionamentoAssembler.toOutPutModel(estacionamento));
 		}
 		
 		return ResponseEntity.notFound().build();
@@ -63,7 +67,7 @@ public class EstacionamentoController {
 
 		EstacionamentoDomainModel estacionamentoAdicionado = estacionamentoService.create(estacionamento);
 
-		return estacionamentoAssembler.toModel(estacionamentoAdicionado);
+		return estacionamentoAssembler.toOutPutModel(estacionamentoAdicionado);
 	}
 
 	@Transactional
@@ -109,4 +113,18 @@ public class EstacionamentoController {
 
 	}
 
+	@PostMapping("/login")
+	public ResponseEntity<EstacionamentoOutputModel> authentication(@RequestBody EstacionamentoLoginModel login,@RequestHeader String Authorization ){
+		EstacionamentoDomainModel estacionamento = estacionamentoAssembler.loginToEntity(login);
+		
+		EstacionamentoDomainModel estacionamentoAutenticado = estacionamentoAuthenticationService.authenticate(estacionamento, Authorization);
+		
+		
+		EstacionamentoOutputModel estacionamentoOutput = estacionamentoAssembler.toOutPutModel(estacionamentoAutenticado);
+
+		System.out.println("logado");
+		return new ResponseEntity<EstacionamentoOutputModel>(estacionamentoOutput,HttpStatus.ACCEPTED);
+		
+	}
+	
 }

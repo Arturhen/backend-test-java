@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import br.com.estacionamento.api.model.EstacionamentoOutputModel;
 import br.com.estacionamento.api.model.EstacionamentoPutModel;
 import br.com.estacionamento.api.model.input.EstacionamentoInputModel;
+import br.com.estacionamento.api.model.input.EstacionamentoLoginModel;
 import br.com.estacionamento.domain.model.EstacionamentoDomainModel;
 import lombok.AllArgsConstructor;
 
@@ -18,13 +19,13 @@ public class EstacionamentoAssembler {
 
 	private ModelMapper modelMapper;
 	
-	public EstacionamentoOutputModel toModel(EstacionamentoDomainModel estacionamento) {
+	public EstacionamentoOutputModel toOutPutModel(EstacionamentoDomainModel estacionamento) {
 		return modelMapper.map(estacionamento, EstacionamentoOutputModel.class);
 	}
 	
 	public List<EstacionamentoOutputModel> toCollectionModel(List<EstacionamentoDomainModel> estacionamentos){
 		return estacionamentos.stream()
-				.map(this::toModel)
+				.map(this::toOutPutModel)
 				.collect(Collectors.toList());
 	}
 	
@@ -34,6 +35,10 @@ public class EstacionamentoAssembler {
 	
 	public EstacionamentoDomainModel putToEntity(EstacionamentoPutModel estacionamentoPut) {
 		return modelMapper.map(estacionamentoPut, EstacionamentoDomainModel.class);
+	}
+
+	public EstacionamentoDomainModel loginToEntity(EstacionamentoLoginModel login) {
+		return modelMapper.map(login, EstacionamentoDomainModel.class);
 	}
 	
 	

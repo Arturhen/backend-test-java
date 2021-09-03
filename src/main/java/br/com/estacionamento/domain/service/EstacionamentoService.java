@@ -19,6 +19,7 @@ public class EstacionamentoService {
 
 	private EstacionamentoRepository estacionamentoRepository;
 	private VeiculoRepository veiculoRepository;
+	private TokenService tokenService;
 
 	@Transactional
 	public EstacionamentoDomainModel create(EstacionamentoDomainModel estacionamento) {
@@ -31,6 +32,10 @@ public class EstacionamentoService {
 				throw new BusinessException("Ja existe uma empresa com Este CNPJ");
 			}
 		}
+//		estacionamento.setToken(tokenService.generateToken(estacionamento));
+		String token = tokenService.generateToken(estacionamento);
+		estacionamento.setToken(token);
+		
 		return estacionamentoRepository.save(estacionamento);
 	}
 

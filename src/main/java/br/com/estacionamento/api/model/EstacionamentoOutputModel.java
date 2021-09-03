@@ -15,4 +15,5 @@ public class EstacionamentoOutputModel {
 	private Integer quantidadeDeMotosEstacionadas;
 	private Integer quantidadeDeVagasParaCarros;
 	private Integer quantidadeDeCarrosEstacionados;
+	private String token;
 }
